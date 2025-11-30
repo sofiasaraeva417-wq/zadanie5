@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бургер-меню - Задание 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Стили для шапки и навигации */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        /* Стили для бургер-меню */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            z-index: 101;
+        }
+        
+        .burger-menu:hover {
+            background-color: rgba(44, 62, 80, 0.1);
+        }
+        
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background-color: #2c3e50;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Анимация бургера в крестик */
+        .burger-menu.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .burger-menu.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .burger-menu.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Стили для обычного меню */
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 25px;
+        }
+        
+        .nav-menu a {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-menu a:hover {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        /* Стили для мобильного меню */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            flex-direction: column;
+            padding: 10px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .mobile-menu.active {
+            display: flex;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .mobile-menu li {
+            margin: 0;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #2c3e50;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(44, 62, 80, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu a:hover {
+            background-color: #2c3e50;
+            color: white;
+            padding-left: 30px;
+        }
+        
+        /* Основной контент */
+        main {
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 0.5rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .content-section {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            transition: transform 0.3s;
+        }
+        
+        .content-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .intro-text {
+            font-size: 1.2rem;
+            color: #555;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .poem {
+            font-style: italic;
+            padding-left: 1.5rem;
+            border-left: 3px solid #6a11cb;
+            margin: 1.5rem 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: flex;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content-section {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">☂</span> Молбсант
+                </div>
+                
+                <!-- Бургер-меню для мобильных устройств -->
+                <div class="burger-menu" id="burgerMenu">
+                    <div class="burger-line"></div>
+                    <div class="burger-line"></div>
+                    <div class="burger-line"></div>
+                </div>
+                
+                <!-- Обычное меню для десктопов -->
+                <ul class="nav-menu">
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Услуги</a></li>
+                    <li><a href="#">Проекты</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <!-- Мобильное меню -->
+            <ul class="mobile-menu" id="mobileMenu">
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Услуги</a></li>
+                <li><a href="#">Проекты</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1>Добро пожаловать на Молбсант!</h1>
+        
+        <div class="intro-text">
+            <p>Это простой сайт с бургер-меню в одном боевом контакте. На мобильном устройстве можно сворачиваться в бургер-меню.</p>
+            <p>Простой и пожилый дождь без лишних элементов.</p>
+        </div>
+        
+        <div class="content-section">
+            <h2>О Молбсант</h2>
+            <p>Молбсант - это компания, которая занимается созданием простых и элегантных решений для вашего бизнеса. Мы верим в минимализм и функциональность.</p>
+            
+            <div class="poem">
+                <p>Помните</p>
+                <p>О чем</p>
+                <p>Болезнете</p>
+            </div>
+            
+            <p>Простой и пожилый дождь без лишних элементов.</p>
+        </div>
+        
+        <div class="content-section">
+            <h2>Наши услуги</h2>
+            <p>Мы предлагаем широкий спектр услуг, направленных на развитие вашего бизнеса в цифровой среде:</p>
+            <ul>
+                <li>Веб-разработка и дизайн</li>
+                <li>Мобильные приложения</li>
+                <li>Цифровой маркетинг</li>
+                <li>Консультации по IT-стратегии</li>
+            </ul>
+        </div>
+        
+        <div class="content-section">
+            <h2>Почему выбирают нас?</h2>
+            <p>Наша команда состоит из опытных профессионалов, которые любят свою работу. Мы уделяем внимание деталям и всегда стремимся к совершенству в каждом проекте.</p>
+            <p>Мы ценим долгосрочные отношения с клиентами и предлагаем индивидуальный подход к каждому проекту.</p>
+        </div>
+    </main>
+    
+    <footer class="footer container">
+        <p>© 2023 Молбсант. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Получаем элементы DOM
+        const burgerMenu = document.getElementById('burgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        // Добавляем обработчик события для бургер-меню
+        burgerMenu.addEventListener('click', function(e) {
+            e.stopPropagation(); // Предотвращаем всплытие события
+            
+            // Переключаем класс 'active' для мобильного меню и бургер-меню
+            mobileMenu.classList.toggle('active');
+            burgerMenu.classList.toggle('active');
+        });
+        
+        // Закрываем меню при клике на пункт меню
+        const menuItems = mobileMenu.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            });
+        });
+        
+        // Закрываем меню при клике вне его области
+        document.addEventListener('click', function(event) {
+            if (!burgerMenu.contains(event.target) && !mobileMenu.contains(event.target)) {
+                mobileMenu.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+        
+        // Закрываем меню при изменении размера окна (если перешли на десктопную версию)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                mobileMenu.classList.remove('active');
+                burgerMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
